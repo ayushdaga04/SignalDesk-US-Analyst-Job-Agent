@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A local, approval-first US analyst job search and application tracking agent." />
+  <title>SignalDesk — US Analyst Job Agent</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#search" aria-label="SignalDesk home">
+        <span class="brand-mark"><i></i><i></i><i></i></span>
+        <span><strong>SignalDesk</strong><small>US analyst job agent</small></span>
+      </a>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <button class="nav-item active" data-view="search"><span>01</span>Search center</button>
+        <button class="nav-item" data-view="shortlist"><span>02</span>Shortlist</button>
+        <button class="nav-item" data-view="tracker"><span>03</span>Application tracker</button>
+        <button class="nav-item" data-view="messages"><span>04</span>Recruiter drafts</button>
+        <button class="nav-item" data-view="settings"><span>05</span>Rules & sources</button>
+      </nav>
+
+      <div class="sidebar-card">
+        <span class="eyebrow">Matching profiles</span>
+        <div class="profile-pill"><span class="dot data"></span>Data Analyst</div>
+        <div class="profile-pill"><span class="dot business"></span>Business Analyst</div>
+        <p>Every role is scored against both resumes.</p>
+      </div>
+
+      <div class="privacy-note"><span></span>Local data only</div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">AYUSH DAGA · UNITED STATES</p>
+          <h1 id="page-title">Search center</h1>
+        </div>
+        <div class="top-actions">
+          <div class="freshness"><span></span><strong>24h</strong> freshness</div>
+          <button class="button secondary" id="export-button">Export tracker</button>
+          <button class="button primary" data-open-add>Add a role</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-search">
+        <div class="hero-grid">
+          <article class="search-panel">
+            <div class="panel-heading">
+              <div><p class="eyebrow">DISCOVERY COMMAND</p><h2>Find the signal, skip the noise.</h2></div>
+              <span class="verified-chip">Approval-first</span>
+            </div>
+            <form id="search-form" class="search-form">
+              <label class="field grow"><span>Target role</span><input id="search-query" value="Data Analyst" list="title-options" /></label>
+              <datalist id="title-options"></datalist>
+              <label class="field"><span>Location</span><input id="search-location" value="United States" /></label>
+              <label class="field compact"><span>Freshness</span><select id="search-hours"><option value="12">12 hours</option><option value="24" selected>24 hours</option><option value="72">3 days</option><option value="168">7 days</option></select></label>
+              <button class="search-submit" type="submit" aria-label="Search current roles">Search roles</button>
+            </form>
+            <div class="smart-search-options">
+              <label class="smart-search-toggle"><input type="checkbox" id="include-adjacent" checked /><span>Include closely related analyst titles</span></label>
+              <label class="smart-search-toggle"><input type="checkbox" id="expand-sparse" checked /><span>Expand to 3 days when fewer than 3 matches are available</span></label>
+            </div>
+            <div class="source-row" id="source-row"></div>
+            <div class="search-links empty-state" id="search-links">
+              Search configured official employer boards and create filtered links for the approved external sources.
+            </div>
+          </article>
+
+          <article class="brief-card">
+            <div class="brief-icon">↗</div>
+            <p class="eyebrow">TODAY'S OPERATING RULE</p>
+            <h3>Quality before application volume.</h3>
+            <p>Apply when the role fits, the source is credible, and work authorization does not conflict.</p>
+            <div class="brief-rule"><span>Target</span><strong>3 strong applications</strong></div>
+            <div class="brief-rule"><span>Outreach</span><strong>5 focused messages</strong></div>
+          </article>
+        </div>
+
+        <div class="metrics-grid" id="metrics-grid"></div>
+
+        <div class="section-grid">
+          <article class="panel official-panel">
+            <div class="panel-heading compact-heading">
+              <div><p class="eyebrow">OFFICIAL PORTAL SCAN</p><h2>Employer-verified roles</h2></div>
+              <button class="button dark" id="official-scan">Scan configured companies</button>
+            </div>
+            <p class="supporting">Automatically checks configured public Greenhouse and Lever boards. Results remain unsaved until you approve them.</p>
+            <div id="official-results" class="result-list empty-state">No scan run yet.</div>
+          </article>
+
+          <article class="panel activity-panel">
+            <div class="panel-heading compact-heading"><div><p class="eyebrow">ACTIVITY</p><h2>Recent decisions</h2></div></div>
+            <div id="activity-list" class="activity-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-shortlist">
+        <div class="view-toolbar">
+          <div class="filter-tabs" id="priority-filters">
+            <button class="active" data-priority="All">All</button>
+            <button data-priority="High">High priority</button>
+            <button data-priority="Medium">Medium</button>
+            <button data-priority="Stretch">Stretch</button>
+            <button data-priority="Skip">Skip</button>
+          </div>
+          <label class="inline-search"><span>⌕</span><input id="job-filter" placeholder="Filter company or role" /></label>
+        </div>
+        <div id="shortlist-list" class="job-list"></div>
+      </section>
+
+      <section class="view" id="view-tracker">
+        <div class="tracker-intro">
+          <div><p class="eyebrow">PIPELINE</p><h2>Move every application forward.</h2></div>
+          <p>Statuses are saved locally. No application is submitted by this dashboard.</p>
+        </div>
+        <div class="kanban" id="kanban"></div>
+      </section>
+
+      <section class="view" id="view-messages">
+        <div class="tracker-intro">
+          <div><p class="eyebrow">OUTREACH QUEUE</p><h2>Drafted, never auto-sent.</h2></div>
+          <p>Review every recruiter message before copying or sending it.</p>
+        </div>
+        <div id="message-list" class="message-grid"></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="settings-grid">
+          <article class="panel settings-card">
+            <p class="eyebrow">SEARCH RULES</p><h2>Guardrails</h2>
+            <label class="toggle-row"><span><strong>Exclude healthcare</strong><small>Filters clinical, patient and hospital roles</small></span><input type="checkbox" id="exclude-healthcare" /><i></i></label>
+            <label class="toggle-row"><span><strong>Exclude security & privacy</strong><small>Filters cybersecurity and clearance roles</small></span><input type="checkbox" id="exclude-security" /><i></i></label>
+            <label class="toggle-row"><span><strong>Include secondary sources</strong><small>Built In, Wellfound and Y Combinator</small></span><input type="checkbox" id="include-secondary" /><i></i></label>
+            <button class="button primary wide" id="save-settings">Save rules</button>
+          </article>
+          <article class="panel settings-card">
+            <p class="eyebrow">SOURCE POLICY</p><h2>Approved discovery sources</h2>
+            <ol class="source-policy">
+              <li><span>Primary</span>Google and official career portals</li>
+              <li><span>Primary</span>LinkedIn, Indeed, Jobright and Dice</li>
+              <li><span>Secondary</span>Built In, Wellfound and Y Combinator</li>
+            </ol>
+            <p class="notice">Secondary roles can enter the shortlist. Every card shows whether it is employer verified, trusted secondary, or pending verification.</p>
+          </article>
+          <article class="panel settings-card span-two">
+            <p class="eyebrow">CONFIGURED ATS WATCHLIST</p><h2>Automatic employer-board scans</h2>
+            <div id="company-list" class="company-list"></div>
+            <p class="supporting">Add Greenhouse or Lever companies in <code>config/companies.json</code>. No private account credentials are stored.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="add-dialog">
+    <form method="dialog" class="dialog-shell" id="add-job-form">
+      <div class="dialog-head">
+        <div><p class="eyebrow">ANALYZE A ROLE</p><h2>Add job description</h2></div>
+        <button value="cancel" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <div class="form-grid">
+        <label class="field"><span>Job title *</span><input name="title" required /></label>
+        <label class="field"><span>Company *</span><input name="company" required /></label>
+        <label class="field"><span>Location</span><input name="location" value="United States" /></label>
+        <label class="field"><span>Work arrangement</span><select name="workArrangement"><option>Not stated</option><option>Remote</option><option>Hybrid</option><option>On-site</option></select></label>
+        <label class="field"><span>Salary</span><input name="salary" placeholder="$70,000–$90,000" /></label>
+        <label class="field"><span>Source</span><select name="source"><option>Official employer portal</option><option>Google</option><option>LinkedIn</option><option>Indeed</option><option>Jobright</option><option>Dice</option><option>Built In</option><option>Wellfound</option><option>Y Combinator</option><option>Staffing portal</option></select></label>
+        <label class="field"><span>Application URL</span><input name="applicationUrl" type="url" /></label>
+        <label class="field"><span>Posting age (hours)</span><input name="postingAgeHours" type="number" min="0" /></label>
+        <label class="field"><span>Recruiter name</span><input name="recruiterName" /></label>
+        <label class="field"><span>Recruiter profile</span><input name="recruiterProfile" type="url" /></label>
+        <label class="field span-two"><span>Job description *</span><textarea name="description" required rows="10" placeholder="Paste the complete job description, including experience and work-authorization language."></textarea></label>
+      </div>
+      <div class="dialog-actions">
+        <button class="button secondary" value="cancel">Cancel</button>
+        <button class="button primary" type="submit" value="default">Analyze & add</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

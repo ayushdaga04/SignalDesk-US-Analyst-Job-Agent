@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: signaldesk-us-job-agent
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/bootstrap
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: NODE_VERSION
+        value: 22
